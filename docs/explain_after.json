@@ -1,0 +1,323 @@
+test> use smartcity
+switched to db smartcity
+
+smartcity> db.sensors.createIndex(
+... { sensor_id: 1, timestamp: -1 },
+... { name: "sensor_timestamp_idx" }
+... )
+sensor_timestamp_idx
+
+// ===========================
+// EXPLAIN 1: Execution stats after creating the first index (sensor_id + timestamp)
+// التوضيح 1: إحصاءات التنفيذ بعد إنشاء الفهرس الأول (sensor_id + timestamp)
+// ===========================
+
+smartcity> db.sensors.find({ sensor_id: "sensor_1" }).sort({ timestamp: -1 }).explain("executionStats")
+{
+  explainVersion: '1',
+  queryPlanner: {
+    namespace: 'smartcity.sensors',
+    parsedQuery: { sensor_id: { '$eq': 'sensor_1' } },
+    indexFilterSet: false,
+    queryHash: '98F0443D',
+    planCacheShapeHash: '98F0443D',
+    planCacheKey: '11DD793E',
+    optimizationTimeMillis: 6,
+smartcity>
+      isCached: false,
+smartcity>
+        keysExamined: 2862,
+        seeks: 1,
+        dupsTested: 0,
+        dupsDropped: 0
+      }
+    }
+  },
+  queryShapeHash: 'B593D31CB5855CF4FC99B97599DA1D76F6693C365AD72A944EC3837E939805FA',
+  command: {
+    find: 'sensors',
+    filter: { sensor_id: 'sensor_1' },
+    sort: { timestamp: -1 },
+    '$db': 'smartcity'
+  },
+  serverInfo: {
+    host: 'DESKTOP-VSEHPPC',
+    port: 27017,
+    version: '8.0.12',
+    gitVersion: 'b60fc6875b5fb4b63cc0dbbd8dda0d6d6277921a'
+  },
+  serverParameters: {
+    internalQueryFacetBufferSizeBytes: 104857600,
+    internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+    internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
+    internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+    internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
+    internalQueryProhibitBlockingMergeOnMongoS: 0,
+    internalQueryMaxAddToSetBytes: 104857600,
+    internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600,
+    internalQueryFrameworkControl: 'trySbeRestricted',
+    internalQueryPlannerIgnoreIndexWithCollationForRegex: 1
+  },
+  ok: 1
+}
+smartcity>
+
+
+
+
+
+test> use smartcity
+switched to db smartcity
+
+smartcity> db.sensors.createIndex(
+... { temperature: 1 },
+... { name: "high_temp_idx", partialFilterExpression: { temperature: { $gt: 30 } } }
+... )
+high_temp_idx
+
+// ===========================
+// EXPLAIN 2: Execution stats after creating the partial index on temperature > 30
+// التوضيح 2: إحصاءات التنفيذ بعد إنشاء الفهرس الجزئي على temperature > 30
+// ===========================
+smartcity> db.sensors.find({ temperature: { $gt: 30 } }).explain("executionStats")
+{
+  explainVersion: '1',
+  queryPlanner: {
+    namespace: 'smartcity.sensors',
+    parsedQuery: { temperature: { '$gt': 30 } },
+    indexFilterSet: false,
+    queryHash: '350DB8EE',
+    planCacheShapeHash: '350DB8EE',
+    planCacheKey: 'ADF6E945',
+    optimizationTimeMillis: 3,
+    maxIndexedOrSolutionsReached: false,
+    maxIndexedAndSolutionsReached: false,
+    maxScansToExplodeReached: false,
+    prunedSimilarIndexes: false,
+    winningPlan: {
+      isCached: false,
+      stage: 'FETCH',
+      inputStage: {
+        stage: 'IXSCAN',
+        keyPattern: { temperature: 1 },
+        indexName: 'high_temp_idx',
+        isMultiKey: false,
+        multiKeyPaths: { temperature: [] },
+        isUnique: false,
+        isSparse: false,
+        isPartial: true,
+        indexVersion: 2,
+        direction: 'forward',
+        indexBounds: { temperature: [ '(30, inf.0]' ] }
+      }
+    },
+    rejectedPlans: []
+  },
+  executionStats: {
+    executionSuccess: true,
+    nReturned: 597360,
+    executionTimeMillis: 1597,
+    totalKeysExamined: 597360,
+    totalDocsExamined: 597360,
+    executionStages: {
+      isCached: false,
+      stage: 'FETCH',
+      nReturned: 597360,
+      executionTimeMillisEstimate: 1524,
+      works: 597361,
+      advanced: 597360,
+      needTime: 0,
+      needYield: 0,
+      saveState: 96,
+      restoreState: 96,
+      isEOF: 1,
+      docsExamined: 597360,
+      alreadyHasObj: 0,
+      inputStage: {
+        stage: 'IXSCAN',
+        nReturned: 597360,
+        executionTimeMillisEstimate: 425,
+        works: 597361,
+        advanced: 597360,
+        needTime: 0,
+        needYield: 0,
+        saveState: 96,
+        restoreState: 96,
+        isEOF: 1,
+        keyPattern: { temperature: 1 },
+        indexName: 'high_temp_idx',
+        isMultiKey: false,
+        multiKeyPaths: { temperature: [] },
+        isUnique: false,
+        isSparse: false,
+        isPartial: true,
+        indexVersion: 2,
+        direction: 'forward',
+        indexBounds: { temperature: [ '(30, inf.0]' ] },
+        keysExamined: 597360,
+        seeks: 1,
+        dupsTested: 0,
+        dupsDropped: 0
+      }
+    }
+  },
+  queryShapeHash: 'CBBC6FD8D71E9A5136693EBB2F85AEFD87AABE3861F36428F942585DCDF93344',
+  command: {
+    find: 'sensors',
+    filter: { temperature: { '$gt': 30 } },
+    '$db': 'smartcity'
+  },
+  serverInfo: {
+    host: 'DESKTOP-VSEHPPC',
+    port: 27017,
+    version: '8.0.12',
+    gitVersion: 'b60fc6875b5fb4b63cc0dbbd8dda0d6d6277921a'
+  },
+  serverParameters: {
+    internalQueryFacetBufferSizeBytes: 104857600,
+    internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+    internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
+    internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+    internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
+    internalQueryProhibitBlockingMergeOnMongoS: 0,
+    internalQueryMaxAddToSetBytes: 104857600,
+    internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600,
+    internalQueryFrameworkControl: 'trySbeRestricted',
+    internalQueryPlannerIgnoreIndexWithCollationForRegex: 1
+  },
+  ok: 1
+}
+smartcity>
+
+
+
+
+
+test> use smartcity
+switched to db smartcity
+
+smartcity> db.sensors.createIndex(
+... { "$**": 1 },
+... { name: "wildcard_all_fields_idx" }
+... )
+wildcard_all_fields_idx
+
+// ===========================
+// EXPLAIN 3: Execution stats after creating the wildcard index on all fields
+// التوضيح 3: إحصاءات التنفيذ بعد إنشاء فهرس الوايلدكارد على جميع الحقول
+// ===========================
+smartcity> db.sensors.find({ pollution_level: { $gt: 100 } }).explain("executionStats")
+{
+  explainVersion: '1',
+  queryPlanner: {
+    namespace: 'smartcity.sensors',
+    parsedQuery: { pollution_level: { '$gt': 100 } },
+    indexFilterSet: false,
+    queryHash: 'AB7A15FC',
+    planCacheShapeHash: 'AB7A15FC',
+    planCacheKey: 'A0CE638F',
+    optimizationTimeMillis: 2,
+    maxIndexedOrSolutionsReached: false,
+    maxIndexedAndSolutionsReached: false,
+    maxScansToExplodeReached: false,
+    prunedSimilarIndexes: false,
+    winningPlan: {
+      isCached: false,
+      stage: 'FETCH',
+      inputStage: {
+        stage: 'IXSCAN',
+        keyPattern: { '$_path': 1, pollution_level: 1 },
+        indexName: 'wildcard_all_fields_idx',
+        isMultiKey: false,
+        multiKeyPaths: { '$_path': [], pollution_level: [] },
+        isUnique: false,
+        isSparse: false,
+        isPartial: false,
+        indexVersion: 2,
+        direction: 'forward',
+        indexBounds: {
+          '$_path': [ '["pollution_level", "pollution_level"]' ],
+          pollution_level: [ '(100, inf.0]' ]
+        }
+      }
+    },
+    rejectedPlans: []
+  },
+  executionStats: {
+    executionSuccess: true,
+    nReturned: 2399775,
+    executionTimeMillis: 7057,
+    totalKeysExamined: 2399775,
+    totalDocsExamined: 2399775,
+    executionStages: {
+      isCached: false,
+      stage: 'FETCH',
+      nReturned: 2399775,
+      executionTimeMillisEstimate: 6893,
+      works: 2399776,
+      advanced: 2399775,
+      needTime: 0,
+      needYield: 0,
+      saveState: 435,
+      restoreState: 435,
+      isEOF: 1,
+      docsExamined: 2399775,
+      alreadyHasObj: 0,
+      inputStage: {
+        stage: 'IXSCAN',
+        nReturned: 2399775,
+        executionTimeMillisEstimate: 2021,
+        works: 2399776,
+        advanced: 2399775,
+        needTime: 0,
+        needYield: 0,
+        saveState: 435,
+        restoreState: 435,
+        isEOF: 1,
+        keyPattern: { '$_path': 1, pollution_level: 1 },
+        indexName: 'wildcard_all_fields_idx',
+        isMultiKey: false,
+        multiKeyPaths: { '$_path': [], pollution_level: [] },
+        isUnique: false,
+        isSparse: false,
+        isPartial: false,
+        indexVersion: 2,
+        direction: 'forward',
+        indexBounds: {
+          '$_path': [ '["pollution_level", "pollution_level"]' ],
+          pollution_level: [ '(100, inf.0]' ]
+        },
+        keysExamined: 2399775,
+        seeks: 1,
+        dupsTested: 0,
+        dupsDropped: 0
+      }
+    }
+  },
+  queryShapeHash: '71180D851090BDC51313EE618B6D781AC6DB6D213931AF92D51FD1F7565D3AD9',
+  command: {
+    find: 'sensors',
+    filter: { pollution_level: { '$gt': 100 } },
+    '$db': 'smartcity'
+  },
+  serverInfo: {
+    host: 'DESKTOP-VSEHPPC',
+    port: 27017,
+    version: '8.0.12',
+    gitVersion: 'b60fc6875b5fb4b63cc0dbbd8dda0d6d6277921a'
+  },
+  serverParameters: {
+    internalQueryFacetBufferSizeBytes: 104857600,
+    internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+    internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
+    internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+    internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
+    internalQueryProhibitBlockingMergeOnMongoS: 0,
+    internalQueryMaxAddToSetBytes: 104857600,
+    internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600,
+    internalQueryFrameworkControl: 'trySbeRestricted',
+    internalQueryPlannerIgnoreIndexWithCollationForRegex: 1
+  },
+  ok: 1
+}
+smartcity>

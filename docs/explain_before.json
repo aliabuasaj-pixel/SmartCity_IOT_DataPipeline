@@ -1,0 +1,57 @@
+smartcity> db.sensors.find({ sensor_id: "sensor_1" }).sort({ timestamp: -1 }).explain("executionStats")
+{
+  explainVersion: '1',
+  queryPlanner: {
+    namespace: 'smartcity.sensors',
+    parsedQuery: { sensor_id: { '$eq': 'sensor_1' } },
+    indexFilterSet: false,
+    queryHash: '98F0443D',
+    planCacheShapeHash: '98F0443D',
+    planCacheKey: 'CAD523E9',
+    optimizationTimeMillis: 5,
+    maxIndexedOrSolutionsReached: false,
+    maxIndexedAndSolutionsReached: false,
+    maxScansToExplodeReached: false,
+    prunedSimilarIndexes: false,
+    winningPlan: {
+      isCached: false,
+      stage: 'SORT',
+      sortPattern: { timestamp: -1 },
+      memLimit: 104857600,
+      type: 'simple',
+smartcity>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      works: 3002864,
+      advanced: 2862,
+      needTime: 3000001,
+      needYield: 0,
+      saveState: 123,
+      restoreState: 123,
+      isEOF: 1,
+      sortPattern: { timestamp: -1 },
+      memLimit: 104857600,
+      type: 'simple',
+      totalDataSizeSorted: 558090,
+      usedDisk: false,
+      spills: 0,
+      spilledDataStorageSize: 0,
+      inputStage: {
+        stage: 'COLLSCAN',
+smartcity>

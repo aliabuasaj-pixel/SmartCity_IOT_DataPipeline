@@ -1,0 +1,10 @@
+2025-10-15T01:32:52.014566 - MV=mv_daily_readings_per_device starting refresh. last_checkpoint=1970-01-01T00:00:00 from_ts=1970-01-01T00:00:00
+2025-10-15T01:32:52.015640 - Running aggregation pipeline for mv_daily_readings_per_device (server-side $merge)
+2025-10-15T01:32:52.028452 - ERROR refreshing mv_daily_readings_per_device: OperationFailure("Cannot find index to verify that join fields will be unique, full error: {'ok': 0.0, 'errmsg': 'Cannot find index to verify that join fields will be unique', 'code': 51183, 'codeName': 'Location51183'}")
+2025-10-15T01:32:52.056521 - MV=mv_monthly_pollution_alerts starting refresh. last_checkpoint=1970-01-01T00:00:00 from_ts=1970-01-01T00:00:00
+2025-10-15T01:32:52.057427 - Running aggregation pipeline for mv_monthly_pollution_alerts (server-side $merge)
+2025-10-15T01:32:52.059585 - ERROR refreshing mv_monthly_pollution_alerts: OperationFailure("Cannot find index to verify that join fields will be unique, full error: {'ok': 0.0, 'errmsg': 'Cannot find index to verify that join fields will be unique', 'code': 51183, 'codeName': 'Location51183'}")
+2025-10-15T01:32:52.062057 - MV=mv_top5_temp_devices_monthly starting refresh. last_checkpoint=1970-01-01T00:00:00 from_ts=1970-01-01T00:00:00
+2025-10-15T01:32:52.063371 - Running aggregation pipeline for mv_top5_temp_devices_monthly (server-side $merge)
+2025-10-15T01:32:52.067497 - ERROR refreshing mv_top5_temp_devices_monthly: OperationFailure("Cannot find index to verify that join fields will be unique, full error: {'ok': 0.0, 'errmsg': 'Cannot find index to verify that join fields will be unique', 'code': 51183, 'codeName': 'Location51183'}")
+2025-10-15T01:32:52.071079 - MV refresh job finished. summary_file=c:\SmartCity_IoT_DataPipeline\logs\mv_refresh_summary_1760491972.json

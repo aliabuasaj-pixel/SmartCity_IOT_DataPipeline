@@ -1,0 +1,23 @@
+{
+  "run_at": "2025-10-15T01:32:52.069755",
+  "results": [
+    {
+      "mv": "mv_daily_readings_per_device",
+      "duration_s": 0.012802839279174805,
+      "docs_after": null,
+      "error": "Cannot find index to verify that join fields will be unique, full error: {'ok': 0.0, 'errmsg': 'Cannot find index to verify that join fields will be unique', 'code': 51183, 'codeName': 'Location51183'}"
+    },
+    {
+      "mv": "mv_monthly_pollution_alerts",
+      "duration_s": 0.002151966094970703,
+      "docs_after": null,
+      "error": "Cannot find index to verify that join fields will be unique, full error: {'ok': 0.0, 'errmsg': 'Cannot find index to verify that join fields will be unique', 'code': 51183, 'codeName': 'Location51183'}"
+    },
+    {
+      "mv": "mv_top5_temp_devices_monthly",
+      "duration_s": 0.0041234493255615234,
+      "docs_after": null,
+      "error": "Cannot find index to verify that join fields will be unique, full error: {'ok': 0.0, 'errmsg': 'Cannot find index to verify that join fields will be unique', 'code': 51183, 'codeName': 'Location51183'}"
+    }
+  ]
+}

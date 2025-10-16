@@ -1,0 +1,39 @@
+C:\Users\Yman>mongosh < C:\SmartCity_IoT_DataPipeline\scripts\daily_aggregation.js
+Current Mongosh Log ID: 68eef08e1bd31a77b3eec4a8
+Connecting to:          mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.5.6
+Using MongoDB:          8.0.12
+Using Mongosh:          2.5.6
+mongosh 2.5.8 is available for download: https://www.mongodb.com/try/download/shell
+
+For mongosh info see: https://www.mongodb.com/docs/mongodb-shell/
+
+------
+   The server generated these startup warnings when booting
+   2025-10-09T10:00:59.888+03:00: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+------
+
+test> db.sensors.aggregate([
+...   {
+...     $project: {
+...       sensor_id: 1,
+...       timestamp: 1,
+...       dateOnly: {
+...         $dateToString: { format: "%Y-%m-%d", date: "$timestamp" }
+...       }
+...     }
+...   },
+...   {
+...     $group: {
+...       _id: { sensor: "$sensor_id", day: "$dateOnly" },
+...       totalReadings: { $sum: 1 }
+...     }
+...   },
+...   {
+...     $sort: { "_id.day": 1, "_id.sensor": 1 }
+...   }
+... ]).toArray().forEach(doc => printjson(doc));
+
+...
+test>
+C:\Users\Yman>
+

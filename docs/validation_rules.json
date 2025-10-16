@@ -1,0 +1,7 @@
+{
+  "temperature": { "min": -10, "max": 40 },
+  "humidity": { "min": 20, "max": 90 },
+  "pollution_level": { "min": 0, "max": 500 },
+  "traffic": { "min": 0, "max": 1000 },
+  "power_usage": { "min": 0, "max": 100 }
+}

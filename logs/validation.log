@@ -1,0 +1,15 @@
+
+
+=== Validation Run: 2025-10-14 17:11:58.803118 ===
+sensors_01_staging.jsonl: total=500000, valid=0, invalid=500000
+sensors_02_staging.jsonl: total=500000, valid=0, invalid=500000
+
+
+=== Validation Run: 2025-10-14 17:20:44.252060 ===
+sensors_01_staging.jsonl: total=500000, valid=500000, invalid=0
+sensors_02_staging.jsonl: total=500000, valid=500000, invalid=0
+
+
+=== Validation Run: 2025-10-14 17:31:16.221729 ===
+sensors_01_staging.jsonl: total=500000, valid=500000, invalid=0
+sensors_02_staging.jsonl: total=500000, valid=500000, invalid=0

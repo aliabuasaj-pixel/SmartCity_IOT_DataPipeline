@@ -1,0 +1,35 @@
+C:\Users\Yman>mongosh < C:\SmartCity_IoT_DataPipeline\scripts\power_usage_monthly_avg.js
+Current Mongosh Log ID: 68eef4ce6513297bf1eec4a8
+Connecting to:          mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.5.6
+Using MongoDB:          8.0.12
+Using Mongosh:          2.5.6
+mongosh 2.5.8 is available for download: https://www.mongodb.com/try/download/shell
+
+For mongosh info see: https://www.mongodb.com/docs/mongodb-shell/
+
+------
+   The server generated these startup warnings when booting
+   2025-10-09T10:00:59.888+03:00: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+------
+
+test> db.sensors.aggregate([
+...   {
+...     $project: {
+...       sensor_id: 1,
+...       timestamp: 1,
+...       power_usage: 1,
+...       month: { $dateToString: { format: "%Y-%m", date: "$timestamp" } }
+...     }
+...   },
+...   {
+...     $group: {
+...       _id: { sensor: "$sensor_id", month: "$month" },
+...       avgPowerUsage: { $avg: "$power_usage" }
+...     }
+...   },
+...   { $sort: { "_id.month": 1, "_id.sensor": 1 } }
+... ])
+
+...
+test>
+C:\Users\Yman>

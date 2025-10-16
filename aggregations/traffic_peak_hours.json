@@ -1,0 +1,39 @@
+C:\Users\Yman>mongosh < C:\SmartCity_IoT_DataPipeline\scripts\traffic_peak_hours.js
+Current Mongosh Log ID: 68eef6512ffb5e5c2ceec4a8
+Connecting to:          mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.5.6
+Using MongoDB:          8.0.12
+Using Mongosh:          2.5.6
+mongosh 2.5.8 is available for download: https://www.mongodb.com/try/download/shell
+
+For mongosh info see: https://www.mongodb.com/docs/mongodb-shell/
+
+------
+   The server generated these startup warnings when booting
+   2025-10-09T10:00:59.888+03:00: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+------
+
+test> db.sensors.aggregate([
+...   {
+...     $match: { traffic_count: { $exists: true } } // تأكد أن الحقل موجود
+...   },
+...   {
+...     $project: {
+...       sensor_id: 1,
+...       hour: { $hour: "$timestamp" },
+...       traffic_count: 1
+...     }
+...   },
+...   {
+...     $group: {
+...       _id: { sensor: "$sensor_id", hour: "$hour" },
+...       totalTraffic: { $sum: "$traffic_count" }
+...     }
+...   },
+...   {
+...     $sort: { "_id.sensor": 1, totalTraffic: -1 }
+...   }
+... ])
+
+...
+test>
+C:\Users\Yman>
